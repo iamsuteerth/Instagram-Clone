@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:instagram_clone/features/providers/firebase_providers.dart';
+import 'package:instagram_clone/features/storage_methods.dart';
 import 'package:instagram_clone/utils/colors.dart';
 import 'package:instagram_clone/utils/firebase_constants.dart';
 import 'package:instagram_clone/utils/utilities.dart';
@@ -14,16 +15,19 @@ final authRepositoryProvider = Provider(
   (ref) => AuthRepository(
     firestore: ref.read(firestoreProvider),
     auth: ref.read(authProvider),
+    storageMethods: ref.read(firebaseStorageProvider),
   ),
 );
 
 class AuthRepository {
   final FirebaseAuth auth;
   final FirebaseFirestore firestore;
+  final StorageMethods storageMethods;
 
   AuthRepository({
     required this.auth,
     required this.firestore,
+    required this.storageMethods,
   });
 
   CollectionReference get users =>
@@ -68,8 +72,19 @@ class AuthRepository {
         password: password,
       );
 
-      users.doc(userCredential.user!.uid).set(
-        {},
+      String photoUrl =
+          await storageMethods.uploadImagetoStorage('profilePics', file, false);
+
+      await users.doc(userCredential.user!.uid).set(
+        {
+          'username': username,
+          'uid': userCredential.user!.uid,
+          'email': email,
+          'bio': bio,
+          'followers': [],
+          'following': [],
+          'photoURL': photoUrl,
+        },
       );
       showSnackBar(
         context: context,

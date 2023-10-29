@@ -165,8 +165,40 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                               ),
                               color: blueColor,
                             ),
-                            child: const Text('Log in'),
+                            child: const Text('Sign up'),
                           ),
+                        ),
+                        Flexible(
+                          flex: 2,
+                          child: Container(),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 10,
+                              ),
+                              child: const Text("Have an account?"),
+                            ),
+                            const SizedBox(
+                              width: 2,
+                            ),
+                            GestureDetector(
+                              onTap: () {},
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 10,
+                                ),
+                                child: const Text(
+                                  " Sign in",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
                         ),
                         Flexible(
                           flex: 2,
