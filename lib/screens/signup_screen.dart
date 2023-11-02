@@ -3,14 +3,15 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:instagram_clone/features/auth/controllers/auth_controller.dart';
+import 'package:instagram_clone/resources/auth_repository.dart';
+import 'package:instagram_clone/screens/login_screen.dart';
 import 'package:instagram_clone/utils/colors.dart';
 import 'package:instagram_clone/utils/utilities.dart';
 import 'package:instagram_clone/utils/widgets/text_field_input.dart';
 
 class SignupScreen extends ConsumerStatefulWidget {
   const SignupScreen({super.key});
-
+  static const String routeName = 'Sign-Up-Screen';
   @override
   ConsumerState<SignupScreen> createState() => _SignupScreenState();
 }
@@ -21,6 +22,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   final TextEditingController bioController = TextEditingController();
   final TextEditingController usernameController = TextEditingController();
   Uint8List? image;
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -38,7 +40,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     });
   }
 
-  void signUpUser(BuildContext context) {
+  void signUpUser(BuildContext context) async {
     if (image == null) {
       showSnackBar(
         context: context,
@@ -48,14 +50,30 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
       );
       return;
     }
-    ref.read(authControllerProvider).signUpUser(
+    setState(() {
+      _isLoading = true;
+    });
+    String res = await AuthRepository().signUpUser(
+      email: emailController.text,
+      password: passwordController.text,
+      username: usernameController.text,
+      bio: bioController.text,
+      file: image!,
+    );
+    setState(() {
+      _isLoading = false;
+    });
+    if (res == 'Success') {
+      // ignore: use_build_context_synchronously
+      Navigator.of(context).pushReplacementNamed(LoginScreen.routeName);
+    } else {
+      // ignore: use_build_context_synchronously
+      showSnackBar(
           context: context,
-          email: emailController.text,
-          password: passwordController.text,
-          username: usernameController.text,
-          bio: bioController.text,
-          file: image!,
-        );
+          content: res,
+          bgColor: mobileSearchColor,
+          textColor: primaryColor);
+    }
   }
 
   @override
@@ -145,7 +163,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           textEditingController: bioController,
                           hintText: 'Enter your bio',
                           textInputType: TextInputType.text,
-                          isPass: true,
+                          isPass: false,
                           maxLength: 150,
                         ),
                         const SizedBox(
@@ -165,7 +183,13 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                               ),
                               color: blueColor,
                             ),
-                            child: const Text('Sign up'),
+                            child: _isLoading
+                                ? const Center(
+                                    child: CircularProgressIndicator(
+                                      color: primaryColor,
+                                    ),
+                                  )
+                                : const Text('Sign up'),
                           ),
                         ),
                         Flexible(
@@ -185,7 +209,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                               width: 2,
                             ),
                             GestureDetector(
-                              onTap: () {},
+                              onTap: () => Navigator.of(context)
+                                  .pushNamed(LoginScreen.routeName),
                               child: Container(
                                 padding: const EdgeInsets.symmetric(
                                   vertical: 10,

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:instagram_clone/resources/providers/user_provider.dart';
 import 'package:instagram_clone/utils/dimensions.dart';
 
-class ResponsiveLayoutScreen extends StatelessWidget {
+class ResponsiveLayoutScreen extends ConsumerStatefulWidget {
   final Widget webScreenLayout;
   final Widget mobileScreenLayout;
   const ResponsiveLayoutScreen({
@@ -11,13 +13,30 @@ class ResponsiveLayoutScreen extends StatelessWidget {
   });
 
   @override
+  ConsumerState<ResponsiveLayoutScreen> createState() =>
+      _ResponsiveLayoutScreenState();
+}
+
+class _ResponsiveLayoutScreenState
+    extends ConsumerState<ResponsiveLayoutScreen> {
+  @override
+  void initState() {
+    super.initState();
+    addData();
+  }
+
+  addData() async {
+    ref.read(userProvider.notifier).refreshUser();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
         if (constraints.maxWidth > webScreenSize) {
-          return webScreenLayout;
+          return widget.webScreenLayout;
         }
-        return mobileScreenLayout;
+        return widget.mobileScreenLayout;
       },
     );
   }
