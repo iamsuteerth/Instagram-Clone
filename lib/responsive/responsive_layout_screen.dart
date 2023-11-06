@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:instagram_clone/resources/providers/user_provider.dart';
-import 'package:instagram_clone/utils/dimensions.dart';
+import 'package:instagram_clone/utils/global_variables.dart';
 
 class ResponsiveLayoutScreen extends ConsumerStatefulWidget {
   final Widget webScreenLayout;

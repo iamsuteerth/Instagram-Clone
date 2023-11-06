@@ -43,3 +43,24 @@ pickImageGallery(BuildContext context) async {
     );
   }
 }
+
+pickImageCamera(BuildContext context) async {
+  try {
+    final imagePicker = ImagePicker();
+    final pickedImage = await imagePicker.pickImage(
+      source: ImageSource.camera,
+      maxWidth: 600,
+    );
+    if (pickedImage != null) {
+      return await pickedImage.readAsBytes();
+    }
+  } catch (e) {
+    // ignore: use_build_context_synchronously
+    showSnackBar(
+      context: context,
+      content: 'Something went wrong',
+      bgColor: Colors.black38,
+      textColor: Colors.white,
+    );
+  }
+}
