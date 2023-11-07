@@ -1,11 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:instagram_clone/models/user.dart';
 
 class Post {
   final String description;
   final String uid;
   final String username;
-  final List<UserModel> likes;
+  final List<String> likes;
   final String postId;
   final DateTime datePublished;
   final String postUrl;

@@ -11,6 +11,7 @@
 | 02-10-2023 | 48               | Persistence auth implementation                                                                                                                                       | 1           |
 | 02-10-2023 | 61               | Fixed bugs, added userProvider, changed project strucutre (total revamp) and finished persistent authentication                                                       | 2           |
 | 06-11-2023 | 82               | Added postImage screen, setup backend for posts, tabBar. Created post model and started feed Screen work.                                                             | 1           |
+| 07-11-2023 | 83               | Finished feedScreen, added stream for user posts on the feed. Created like animation and added feature to like posts. Worked on PostCard                              | 1           |
 
 # Screens
 For the signup screen, a good implementation of SingleChildScrollView along with container is present. This can be found in one of the solutions from this stackOverflow page
