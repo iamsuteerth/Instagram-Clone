@@ -99,4 +99,8 @@ class AuthRepository {
       return e.toString();
     }
   }
+
+  Future<void> signOut() async {
+    await auth.signOut();
+  }
 }
